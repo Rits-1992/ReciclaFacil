@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta - ReciclaFacil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .container h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .container p {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .login-link a:hover {
+            color: #764ba2;
+        }
+
+        .erro {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            font-size: 14px;
+        }
+
+        .sucesso {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            font-size: 14px;
+        }
+
+        .form-group.required label::after {
+            content: " *";
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ReciclaFacil</h1>
+        <p>Crie sua conta e comece a reciclar</p>
+
+        <!-- Exibir erro se houver -->
+        <th:block th:if="${erro}">
+            <div class="erro" th:text="${erro}"></div>
+        </th:block>
+
+        <!-- Exibir sucesso se houver -->
+        <th:block th:if="${mensagem}">
+            <div class="sucesso" th:text="${mensagem}"></div>
+        </th:block>
+
+        <!-- Formulário de Registro -->
+        <form action="/usuarios/registrar" method="POST">
+            <div class="form-group required">
+                <label for="nomeUsuario">Nome Completo</label>
+                <input 
+                    type="text" 
+                    id="nomeUsuario" 
+                    name="nomeUsuario" 
+                    placeholder="Digite seu nome completo"
+                    required>
+            </div>
+
+            <div class="form-group required">
+                <label for="emailUsuario">Email</label>
+                <input 
+                    type="email" 
+                    id="emailUsuario" 
+                    name="emailUsuario" 
+                    placeholder="seu.email@example.com"
+                    required>
+            </div>
+
+            <div class="form-group required">
+                <label for="senhaUsuario">Senha</label>
+                <input 
+                    type="password" 
+                    id="senhaUsuario" 
+                    name="senhaUsuario" 
+                    placeholder="Digite uma senha segura"
+                    minlength="6"
+                    required>
+                <small style="color: #999; font-size: 12px; margin-top: 5px; display: block;">
+                    Mínimo 6 caracteres
+                </small>
+            </div>
+
+            <button type="submit" class="btn-register">Criar Conta</button>
+
+            <div class="login-link">
+                Já tem uma conta? <a href="/usuarios/login">Faça login aqui</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

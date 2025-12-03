@@ -1,0 +1,833 @@
+/* =========================================================
+   ESTILO GERAL
+   ========================================================= */
+body {
+  background-color: #eaf5e9;                /* Cor de fundo geral em tom verde-claro */
+  font-family: Arial, sans-serif;           /* Fonte padrão do site */
+  display: flex;                            /* Centraliza conteúdo vertical e horizontalmente */
+  justify-content: center;
+  align-items: center;
+  height: 75vh;                             /* Altura da viewport */
+  margin: 0;
+}
+
+/* =========================================================
+   LOGIN E CADASTRO
+   ========================================================= */
+.login-container {
+  background-color: white;                  /* Fundo branco para o card */
+  padding: 40px;
+  border-radius: 12px;                      /* Cantos arredondados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  text-align: center;
+  width: 320px;                             /* Largura fixa padrão */
+}
+
+.login-container h1 {
+  color: #2e7d32;                           /* Verde principal */
+  margin-bottom: 20px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+
+.login-container p {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-container a {
+  color: #2e7d32;
+  text-decoration: none;
+}
+
+.login-container a:hover {
+  text-decoration: underline;
+}
+.login-container button:hover {
+  background-color: #000200;
+}
+/* =========================================================
+   BOTÕES DE LOGIN (ENTRAR / CANCELAR)
+   ========================================================= */
+.botoes-login {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-entrar {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 48%;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn-entrar:hover {
+  background-color: #43a047;
+}
+
+.btn-cancelar {
+  background-color: #d32f2f;   /* Vermelho principal */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 48%;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn-cancelar:hover {
+  background-color: #b71c1c;   /* Tom mais escuro no hover */
+}
+
+/* =========================================================
+   PÁGINA INICIAL (HOME)
+   ========================================================= */
+
+/* 🔹 Corpo da página com imagem de fundo */
+.home-body {
+  background: url("../img/fundo_natureza.png") no-repeat center center fixed;
+  background-size: cover;                   /* Preenche toda a tela */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #2e7d32;
+}
+
+/* 🔹 Cabeçalho fixo e transparente */
+.topo {
+  position: fixed;                          /* Fica sempre no topo da página */
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;                            /* Organiza o logo e botão em linha */
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8); /* Fundo branco translúcido */
+  padding: 15px 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);  /* Sombra discreta */
+  z-index: 10;                              /* Garante que o cabeçalho fique acima do conteúdo */
+}
+
+/* 🔹 Área do logotipo e nome */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 70px;
+  height: auto;
+}
+
+.logo h1 {
+  color: #2e7d32;
+  font-size: 28px;
+  margin: 0;
+}
+
+/* 🔹 Botão de login / sair */
+.botao-login {
+  background-color: #43a047;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.botao-login:hover {
+  background-color: #000701;
+}
+
+/* 🔹 Texto inicial de boas-vindas (index.html) */
+.conteudo-inicial {
+  text-align: center;
+  max-width: 800px;
+  margin: 120px auto 0;                     /* Afasta do topo (por causa do cabeçalho fixo) */
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(5px);               /* Efeito de desfoque no fundo */
+  padding: 80px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  margin-top: 220px;
+}
+
+.conteudo-inicial h2 {
+  color: #2e7d32;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.conteudo-inicial p {
+  font-size: 18px;
+  color: #333;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   HOME COM RETÂNGULO BRANCO E CARDS
+   ========================================================= */
+
+/* 🔹 Container principal do conteúdo */
+.home-conteudo {
+  position: relative;
+  text-align: center;
+  padding: 80px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+/* 🔹 Retângulo branco atrás dos cards */
+.home-fundo-branco {
+  position: absolute;
+  top: 53%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  max-width: 1100px;
+  min-height: 500px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  z-index: 1;                              /* Fica entre o fundo e o texto/cards */
+}
+
+/* 🔹 Texto e cards sobre o retângulo */
+.home-card-wrapper {
+  position: relative;
+  z-index: 2;                              /* Fica acima do retângulo branco */
+  text-align: center;
+}
+
+.home-card-wrapper h2 {
+  font-size: 2rem;
+  color: #2e7d32;
+  margin-bottom: 10px;
+}
+
+.home-card-wrapper p {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+/* =========================================================
+   CARDS PRINCIPAIS DA HOME
+   ========================================================= */
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+}
+
+.card:hover img {
+  filter: brightness(0.8);
+}
+
+/* =========================================================
+   CARDS PRINCIPAIS DA HOME (IMAGEM + BOTÃO)
+   ========================================================= */
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* 🔹 Card com imagem + botão abaixo */
+.card {
+  width: 300px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* 🔹 Imagem clicável dentro do card */
+.card-link {
+  display: block;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.card-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: filter 0.3s ease, transform 0.3s ease;
+  border-bottom: 3px solid #2e7d32; /* linha separando imagem e botão */
+}
+
+.card:hover img {
+  filter: brightness(0.85);
+  transform: scale(1.05);
+}
+
+/* 🔹 Botão embaixo da imagem (unido ao card) */
+.botao-card {
+  background-color: #2e7d32;
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 0;
+  border-radius: 0 0 15px 15px;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+.botao-card:hover {
+  background-color: #43a047;
+}
+
+.botao-card:hover {
+  background-color: rgba(46, 204, 113, 1);
+  
+}
+
+/* =========================================================
+   PÁGINA DE PESQUISA / VERIFICAR PRODUTO
+   ========================================================= */
+
+/* 🔹 Estrutura principal */
+.pesquisa-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🔹 Cabeçalho fixo dentro do container */
+.barra-pesquisa-fixa {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 2;
+  padding-top: 10px;
+}
+
+/* 🔹 Campo de busca */
+.campo-busca {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.campo-busca:focus {
+  border-color: #2e7d32;
+}
+
+/* 🔹 Lista de sugestões */
+.lista-sugestoes {
+  background: #fff;
+  border-radius: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 120px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+}
+
+.lista-sugestoes li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.lista-sugestoes li:hover {
+  background-color: #e8f5e9;
+}
+
+/* 🔹 Área dos resultados */
+.resultado-card {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 400px;
+  padding: 20px;
+}
+
+.resultado-card h2 {
+  text-align: center;
+  color: #2e7d32;
+}
+
+.resultado-card h3 {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 15px;
+}
+
+.resultado-card ul {
+  list-style: none;
+  padding: 0;
+  color: #333;
+}
+
+.resultado-card li {
+  margin-bottom: 15px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+/* 🔹 Versão do container de pesquisa dentro da home */
+.home-card-wrapper.pesquisa-container {
+  background-color: #fff;
+  width: 90%;
+  max-width: 900px;
+  min-height: 0vh;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 40px 20px 50px;
+  margin-top: 260px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+/* ===== Container principal ===== */
+.contato-container {
+  margin-top: 200px;
+  background: #fff;
+  width: 90%;
+  max-width: 700px;
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Cabeçalhos e texto ===== */
+.contato-container h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #2e8b57;
+}
+
+.contato-container p {
+  color: #555;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+}
+
+/* ===== Formulário ===== */
+.form-contato {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+}
+
+.form-contato label {
+  font-weight: 600;
+  color: #333;
+}
+
+.form-contato input,
+.form-contato textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1.5px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
+.form-contato input:focus,
+.form-contato textarea:focus {
+  border-color: #3cb371;
+  box-shadow: 0 0 5px rgba(60,179,113,0.3);
+  background-color: #fff;
+  outline: none;
+}
+
+.form-contato textarea {
+  resize: none;
+}
+
+/* ===== Botão ===== */
+.botao-enviar {
+  align-self: center;
+  width: 50%;
+  background-color: #3cb371;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.botao-enviar:hover {
+  background-color: #2e8b57;
+  transform: scale(1.03);
+}
+
+/* ===== Mensagem de sucesso ===== */
+.mensagem-sucesso {
+  display: none;
+  margin-top: 20px;
+  background-color: #e8f8ee;
+  color: #2e8b57;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 600px) {
+  .botao-enviar {
+    width: 100%;
+  }
+
+  .contato-container {
+    padding: 35px 20px;
+  }
+}
+/* =========================================================
+   ESTILO GERAL DO PAINEL ADMINISTRATIVO
+   ========================================================= */
+.admin-body {
+  background-color: #eaf5e9;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+/* ================= TOPO ================= */
+.topo-admin {
+  background-color: #2e7d32;
+  color: white;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-sair {
+  background: #d32f2f;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-sair:hover {
+  background: #b71c1c;
+  transform: scale(1.05);
+}
+
+/* ================= CONTAINER PRINCIPAL ================= */
+.admin-container {
+  width: 90%;
+  max-width: 1000px;
+  background: white;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  min-height: 600px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= ABAS ================= */
+.abas {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.aba {
+  background: #e0e0e0;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+.aba:hover {
+  background: #c8e6c9;
+}
+.aba.ativa {
+  background: #2e7d32;
+  color: white;
+}
+
+/* ================= CONTEÚDO DAS ABAS ================= */
+.conteudo-aba {
+  display: none;
+}
+.conteudo-aba.ativo {
+  display: block;
+}
+
+/* ================= AÇÕES ================= */
+.acoes {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.acoes input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.acoes button {
+  background: #2e7d32;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.acoes button:hover {
+  background: #43a047;
+  transform: scale(1.05);
+}
+
+/* ================= TABELAS ================= */
+.tabela-container {
+  max-height: 350px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.tabela-admin {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-admin th {
+  background: #2e7d32;
+  color: white;
+  padding: 10px;
+}
+
+.tabela-admin td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* ================= MODAL ================= */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  width: 350px;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.modal-botoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.salvar {
+  background: #2e7d32;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+}
+.cancelar {
+  background: #d32f2f;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+}
+/* RESET APENAS PARA O PAINEL ADMINISTRATIVO */
+.admin-body {
+  display: block !important;
+  justify-content: initial !important;
+  align-items: initial !important;
+  height: auto !important;
+}
+/* =========================================================
+   MODAL (BALÃO DE EDIÇÃO / ADIÇÃO)
+   ========================================================= */
+.modal {
+  display: none; /* Invisível por padrão */
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55); /* fundo escurecido */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* Conteúdo do balão */
+.modal-content {
+  background: #ffffff;
+  width: 90%;
+  max-width: 420px;
+  padding: 25px 30px;
+  border-radius: 18px;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+  animation: modalAnim 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Título */
+.modal-content h3 {
+  color: #2e7d32;
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 20px;
+  text-align: center;
+}
+
+/* Inputs */
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #bdbdbd;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+/* Área dos botões */
+.modal-botoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+/* Botões */
+.modal-botoes button {
+  border: none;
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+/* Confirmar */
+.modal-botoes .salvar,
+.modal-botoes .confirmar {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.modal-botoes .salvar:hover,
+.modal-botoes .confirmar:hover {
+  background: #43a047;
+  transform: scale(1.05);
+}
+
+/* Cancelar */
+.modal-botoes .cancelar {
+  background: #d32f2f;
+  color: #fff;
+}
+
+.modal-botoes .cancelar:hover {
+  background: #b71c1c;
+  transform: scale(1.05);
+}
+
+/* Animação */
+@keyframes modalAnim {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

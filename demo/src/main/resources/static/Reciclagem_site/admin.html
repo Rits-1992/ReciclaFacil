@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - ReciclaFácil</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Pequeno CSS para modais/checkboxes (se já tiver, pode remover) */
+    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); z-index: 50; }
+    .modal-content { background: white; padding: 20px; width: 90%; max-width: 720px; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .modal-grid-full { grid-column: 1 / -1; }
+    .checkbox-list { max-height: 150px; overflow: auto; border: 1px solid #ddd; padding: 8px; border-radius: 6px; }
+    label.checkbox-item { display: block; margin-bottom: 6px; }
+    .modal-botoes { margin-top: 12px; display: flex; gap: 8px; justify-content: flex-end; }
+    .acoes { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
+    .tabela-admin th, .tabela-admin td { padding: 8px 6px; text-align:left; }
+  </style>
+</head>
+<body class="admin-body">
+
+  <header class="topo-admin">
+    <h1>Painel Administrativo</h1>
+    <button class="btn-sair" onclick="window.location.href='index.html'">Sair</button>
+  </header>
+
+  <main class="admin-container">
+
+    <div class="abas">
+      <button class="aba ativa" onclick="mostrarAba('abaProdutos', event)">Produtos</button>
+      <button class="aba" onclick="mostrarAba('abaColeta', event)">Pontos de Coleta</button>
+      <button class="aba" onclick="mostrarAba('abaMensagens', event)">Mensagens</button>
+    </div>
+
+    <!-- PRODUTOS -->
+    <div id="abaProdutos" class="conteudo-aba ativo">
+      <h2>Gerenciar Produtos</h2>
+
+      <div class="acoes">
+        <input type="text" id="buscaProduto" placeholder="Buscar produto..." />
+        <button onclick="buscarProduto()">Buscar</button>
+        <button onclick="abrirModalProduto()">Adicionar Produto</button>
+      </div>
+
+      <div class="tabela-container">
+        <table class="tabela-admin">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Reciclável</th>
+              <th>Tipo</th>
+              <th>Locais</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="listaProdutos"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PONTOS DE COLETA -->
+    <div id="abaColeta" class="conteudo-aba">
+      <h2>Gerenciar Pontos de Coleta</h2>
+
+      <div class="acoes">
+        <input type="text" id="buscaColeta" placeholder="Buscar ponto de coleta..." />
+        <button onclick="buscarColeta()">Buscar</button>
+        <button onclick="abrirModalColeta()">Adicionar Ponto</button>
+      </div>
+
+      <div class="tabela-container">
+        <table class="tabela-admin">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Local</th>
+              <th>Endereço</th>
+              <th>Contatos</th>
+              <th>Tipos aceitos</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="listaColeta"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MENSAGENS (placeholder) -->
+    <div id="abaMensagens" class="conteudo-aba">
+      <h2>Mensagens Recebidas</h2>
+      <div class="tabela-container">
+        <table class="tabela-admin">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Mensagem</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="listaMensagens"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL PRODUTO (com todos os campos pedidos) -->
+  <div id="modalProduto" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <h3 id="tituloModalProduto">Novo Produto</h3>
+
+      <div class="modal-grid">
+        <div>
+          <label>Nome:</label>
+          <input type="text" id="nomeProduto" />
+        </div>
+
+        <div>
+          <label>Reciclável:</label>
+          <div>
+            <input type="checkbox" id="reciclavelProduto" />
+            <label for="reciclavelProduto">Sim</label>
+          </div>
+        </div>
+
+        <div class="modal-grid-full">
+          <label>Descrição:</label>
+          <textarea id="descricaoProduto" rows="3" style="width:100%"></textarea>
+        </div>
+
+        <div>
+          <label>Tipo de descarte:</label>
+          <select id="tipoDescarteProduto"></select>
+        </div>
+
+        <div>
+          <label>Pontos de coleta (marque os que aceitam):</label>
+          <div id="listaLocaisDescarteProduto" class="checkbox-list"></div>
+        </div>
+      </div>
+
+      <div class="modal-botoes">
+        <button class="salvar" onclick="salvarProduto()">Confirmar</button>
+        <button class="cancelar" onclick="fecharModalProduto()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL COLETA (com todos os campos pedidos) -->
+  <div id="modalColeta" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <h3 id="tituloModalColeta">Novo Ponto de Coleta</h3>
+
+      <div class="modal-grid">
+        <div>
+          <label>Nome do local:</label>
+          <input type="text" id="localColeta" />
+        </div>
+
+        <div>
+          <label>Contato (telefone):</label>
+          <input type="text" id="contatoColeta" />
+        </div>
+
+        <div>
+          <label>Email:</label>
+          <input type="email" id="emailColeta" />
+        </div>
+
+        <div>
+          <label>Horário abertura:</label>
+          <input type="time" id="horarioAberturaColeta" />
+        </div>
+
+        <div>
+          <label>Horário fechamento:</label>
+          <input type="time" id="horarioFechamentoColeta" />
+        </div>
+
+        <div class="modal-grid-full">
+          <label>Descrição:</label>
+          <textarea id="descricaoColeta" rows="2" style="width:100%"></textarea>
+        </div>
+
+        <div>
+          <label>Rua:</label>
+          <input type="text" id="ruaColeta" />
+        </div>
+
+        <div>
+          <label>Número:</label>
+          <input type="number" id="numeroColeta" />
+        </div>
+
+        <div>
+          <label>Bairro:</label>
+          <input type="text" id="bairroColeta" />
+        </div>
+
+        <div>
+          <label>Cidade:</label>
+          <input type="text" id="cidadeColeta" />
+        </div>
+
+        <div>
+          <label>Estado (UF):</label>
+          <input type="text" id="estadoColeta" maxlength="2" />
+        </div>
+
+        <div>
+          <label>CEP:</label>
+          <input type="text" id="cepColeta" />
+        </div>
+
+        <div class="modal-grid-full">
+          <label>Tipos de descarte aceitos (marque):</label>
+          <div id="listaTiposDescarteColeta" class="checkbox-list"></div>
+        </div>
+      </div>
+
+      <div class="modal-botoes">
+        <button class="salvar" onclick="salvarColeta()">Confirmar</button>
+        <button class="cancelar" onclick="fecharModalColeta()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

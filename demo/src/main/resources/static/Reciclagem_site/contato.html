@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fale Conosco - ReciclaFácil</title>
+
+  <!-- Importa o CSS principal e o da página -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/fale_conosco.css">
+</head>
+<body class="home-body">
+
+  <header class="topo">
+    <div class="logo">
+      <img src="img/logo.png" alt="Logo ReciclaFácil">
+      <h1>ReciclaFácil</h1>
+    </div>
+    <a href="home.html" class="botao-login">Voltar</a>
+  </header>
+
+  <main>
+    <div class="contato-container">
+      <h2>Fale Conosco</h2>
+      <p>Tem alguma dúvida, sugestão ou problema? Envie uma mensagem e responderemos o mais rápido possível 💬</p>
+
+      <form id="form-contato" class="form-contato">
+        <div>
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+        </div>
+
+        <div>
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+        </div>
+
+        <div>
+          <label for="mensagem">Mensagem</label>
+          <textarea id="mensagem" name="mensagem" placeholder="Digite sua mensagem aqui..." rows="6" required></textarea>
+        </div>
+
+        <button type="submit" class="botao-enviar">Enviar</button>
+      </form>
+
+      <div id="mensagem-sucesso" class="mensagem-sucesso">
+        ✅ Mensagem enviada com sucesso! Obrigado pelo contato.
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('form-contato');
+    const msgSucesso = document.getElementById('mensagem-sucesso');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const mensagem = document.getElementById('mensagem').value.trim();
+
+      if (nome && email && mensagem) {
+        form.reset();
+        msgSucesso.style.display = 'block';
+        setTimeout(() => {
+          msgSucesso.style.display = 'none';
+        }, 4000);
+      }
+    });
+  </script>
+
+</body>
+</html>

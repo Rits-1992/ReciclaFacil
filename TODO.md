@@ -1,0 +1,2 @@
+- [x] Corrigir MaterialAdminResponseDTO para usar Set<TipoDescarteResumoDTO> em vez de TipoDescarteResumoDTO
+- [x] Corrigir toPublicDTO em ServiceMaterial.java para incluir descricao, mapear tipoDescarte para Set<String>, e mapear locaisDescarte para Set<String> filtrado

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificar Produto - ReciclaFácil</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="home-body">
+
+  <header class="topo">
+    <div class="logo">
+      <img src="img/logo.png" alt="Logo ReciclaFácil">
+      <h1>ReciclaFácil</h1>
+    </div>
+    <a href="home.html" class="botao-login">Voltar</a>
+  </header>
+
+  <main class="home-conteudo">
+    
+
+    <div class="home-card-wrapper pesquisa-container">
+      <h2>Verificar Produto</h2>
+      <p>Digite o nome do produto e veja se ele é reciclável ♻️</p>
+
+      <!-- Campo de busca fixo -->
+      <div class="barra-pesquisa-fixa">
+        <input type="text" id="search" placeholder="Ex: Garrafa PET, Lata de alumínio..." autocomplete="off" class="campo-busca">
+        <ul id="suggestions" class="lista-sugestoes"></ul>
+      </div>
+
+      <!-- Área rolável para os resultados -->
+      <div id="resultado" class="resultado-card">
+        <p style="text-align:center; color:#666;">Pesquise um produto acima para ver detalhes.</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/produtos.js"></script>
+
+</body>
+</html>
