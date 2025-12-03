@@ -831,3 +831,18 @@ body {
     transform: scale(1);
   }
 }
+
+/* Estilo padrão para os botões de ação da tabela */
+.tabela-admin button {
+  padding: 4px 12px;
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: center;
+  color: #0a0909;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 70px;  /* largura mínima para uniformizar */
+  white-space: nowrap; /* evita que o texto quebre linha */
+  transition: background-color 0.3s ease;
+  display: flex
+}

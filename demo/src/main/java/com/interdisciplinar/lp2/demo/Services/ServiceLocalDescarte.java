@@ -175,8 +175,27 @@ public class ServiceLocalDescarte {
                                 .map(local -> new LocalDescarteAdminResponseDTO(
                                                 local.getId(),
                                                 local.getNome(),
-                                                null, null, local.getContato(),
-                                                null, null, local.isSituacao(), null, null))
+                                                local.getHorarioAbertura(),
+                                                local.getHorarioFechamento(),
+                                                local.getContato(),
+                                                local.getEmail(),
+                                                local.getDescricao(),
+                                                local.isSituacao(),
+                                                // montar endereço
+                                                new LocalDescarteAdminResponseDTO.EnderecoDTO(
+                                                                local.getEndereco().getRua(),
+                                                                local.getEndereco().getNumero(),
+                                                                local.getEndereco().getComplemento(),
+                                                                local.getEndereco().getBairro(),
+                                                                local.getEndereco().getCidade(),
+                                                                local.getEndereco().getEstado(),
+                                                                local.getEndereco().getCep()),
+                                                // montar tipos de descarte
+                                                local.getTiposDescarte()
+                                                                .stream()
+                                                                .map(tipo -> new LocalDescarteAdminResponseDTO.TipoDescarteDTO(
+                                                                                tipo.getId(), tipo.getNome()))
+                                                                .collect(Collectors.toSet())))
                                 .collect(Collectors.toList());
         }
 

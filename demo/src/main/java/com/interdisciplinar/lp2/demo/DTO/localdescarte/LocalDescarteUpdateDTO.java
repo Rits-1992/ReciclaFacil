@@ -1,12 +1,8 @@
 package com.interdisciplinar.lp2.demo.DTO.localdescarte;
-
 import java.time.LocalTime;
 import java.util.Set;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 public record LocalDescarteUpdateDTO(
 
     //@NotNull(message = "O ID é obrigatório")

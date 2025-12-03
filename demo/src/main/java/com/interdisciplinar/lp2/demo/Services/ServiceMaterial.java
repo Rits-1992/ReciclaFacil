@@ -1,12 +1,8 @@
 package com.interdisciplinar.lp2.demo.Services;
-
 import java.util.List;
-import java.util.Set;
 import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.interdisciplinar.lp2.demo.DTO.material.MaterialAdminResponseDTO;
 import com.interdisciplinar.lp2.demo.DTO.material.MaterialPublicResponseDTO;
 import com.interdisciplinar.lp2.demo.DTO.material.MaterialRequestDTO;
@@ -21,8 +17,6 @@ import com.interdisciplinar.lp2.demo.Repositories.RepositoryLogPesquisa;
 import com.interdisciplinar.lp2.demo.Repositories.RepositoryMaterial;
 import com.interdisciplinar.lp2.demo.Repositories.RepositoryTipoDescarte;
 import com.interdisciplinar.lp2.demo.Repositories.RepositoryUsuario;
-
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;

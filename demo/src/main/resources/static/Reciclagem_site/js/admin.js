@@ -538,7 +538,7 @@ async function atualizarMensagens() {
   tbody.innerHTML = `
     <tr>
       <td colspan="5" style="text-align:center; color:#666;">
-        Backend de mensagens não implementado.
+        Nenhuma mensagem nova.
       </td>
     </tr>
   `;
