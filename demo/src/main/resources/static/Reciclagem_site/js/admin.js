@@ -1,8 +1,10 @@
 // admin.js - Versão completa para CRUD de Materiais e Pontos de Coleta
-const API_BASE = "http://localhost:8080";
+// Use o origin atual para não travar em uma porta fixa
+const API_BASE = window.location.origin;
 const API_MATERIAL = `${API_BASE}/materiais`;
 const API_LOCAIS = `${API_BASE}/localDescarte`;
 const API_TIPOS = `${API_BASE}/tipoDescarte`;
+const API_MENSAGENS = `${API_BASE}/mensagens`;
 
 let editandoProduto = null;
 let editandoColeta = null;
@@ -17,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   carregarLocaisDescarte();   // carrega locais (usado no modal produto e listagem)
   atualizarProdutos();
   atualizarColeta();
-  atualizarMensagens();
+  listarMensagens();
 });
 
 /* ========================= UI Helpers ========================= */
@@ -532,107 +534,110 @@ console.log("JSON enviado para o backend:", JSON.stringify(bodyObj, null, 2));
   }
 }
 
-/* ========================= MENSAGENS (placeholder) ========================= */
-async function atualizarMensagens() {
-  const tbody = document.getElementById("listaMensagens");
-  tbody.innerHTML = `
-    <tr>
-      <td colspan="5" style="text-align:center; color:#666;">
-        Nenhuma mensagem nova.
-      </td>
-    </tr>
-  `;
+// =============================
+// MENSAGENS — CRUD + PROCEDURE
+// =============================
+async function listarMensagens() {
+    try {
+        // Usar a VIEW do banco de dados via endpoint /view
+        const resp = await fetch(`${API_MENSAGENS}/view`);
+        if (!resp.ok) {
+          const text = await resp.text().catch(() => null);
+          console.error("Erro ao buscar mensagens:", resp.status, text);
+          // opcional: mostrar mensagem ao usuário
+          const tabela = document.getElementById("tabelaMensagens");
+          if (tabela) tabela.innerHTML = `<tr><td colspan='7'>Erro ao buscar mensagens: ${resp.status}</td></tr>`;
+          return;
+        }
+        const dados = await resp.json();
+
+        const tabela = document.getElementById("tabelaMensagens");
+        if (!tabela) {
+            console.error("Elemento tabelaMensagens não encontrado");
+            return;
+        }
+        tabela.innerHTML = "";
+
+        if (!dados || dados.length === 0) {
+            tabela.innerHTML = "<tr><td colspan='7'>Nenhuma mensagem encontrada</td></tr>";
+            return;
+        }
+
+        dados.forEach(msg => {
+            const dataFormatada = msg.dataEnvio ? new Date(msg.dataEnvio).toLocaleString('pt-BR') : '-';
+            const conteudoTruncado = msg.conteudo && msg.conteudo.length > 50 
+                ? msg.conteudo.substring(0, 50) + '...' 
+                : msg.conteudo || '-';
+            
+            // Botão dinamico: se LIDA, desabilita; se ENVIADA, mostra botão ativo
+            const botaoStatus = msg.status === 'LIDA' 
+                ? '<button disabled style="cursor: not-allowed; background: #28a745; color: white; padding: 4px 8px; border: none; border-radius: 4px; font-size: 12px;">✓ Lida</button>'
+                : `<button onclick="marcarComoLida(${msg.id})" style="background: #ffc107; color: #333; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">Marcar como Lida</button>`;
+            
+            tabela.innerHTML += `
+                <tr>
+                    <td>${msg.id || '-'}</td>
+                    <td>${msg.titulo || '-'}</td>
+                    <td title="${msg.conteudo || ''}">${conteudoTruncado}</td>
+                    <td><span style="padding: 4px 8px; border-radius: 4px; background: ${msg.status === 'ENVIADA' ? '#ffc107' : msg.status === 'LIDA' ? '#28a745' : '#6c757d'}; color: white; font-size: 12px;">${msg.status || '-'}</span></td>
+                    <td>${msg.nomeUsuario || '-'}</td>
+                    <td>${dataFormatada}</td>
+                    <td>${botaoStatus}</td>
+                </tr>`;
+        });
+    } catch (error) {
+        console.error("Erro ao listar mensagens:", error);
+        const tabela = document.getElementById("tabelaMensagens");
+        if (tabela) {
+            tabela.innerHTML = "<tr><td colspan='7'>Erro ao carregar mensagens</td></tr>";
+        }
+    }
 }
 
-// Tenta mapear o texto/JSON de erro do servidor para mensagens por campo
-function mapServerErrors(text, parsed) {
-  const msgs = [];
-  const lower = (text || '').toLowerCase();
+// Função para marcar mensagem como lida
+async function marcarComoLida(idMensagem) {
+    try {
+        const resp = await fetch(`${API_MENSAGENS}/${idMensagem}/status/LIDA`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-  // se já veio um JSON estruturado com violações
-  if (parsed) {
-    // common: { violations: [{ propertyPath, message }] }
-    if (Array.isArray(parsed.violations)) {
-      parsed.violations.forEach(v => {
-        const field = (v.propertyPath || v.field || '').toLowerCase();
-        const message = v.message || JSON.stringify(v);
-        if (field.includes('email')) msgs.push(`Email: ${message}`);
-        else if (field.includes('cep')) msgs.push(`CEP: ${message}`);
-        else if (field.includes('numero') || field.includes('number')) msgs.push(`Número: ${message}`);
-        else if (field.includes('tipo')) msgs.push(`Tipo de descarte: ${message}`);
-        else msgs.push(`${field || 'Campo'}: ${message}`);
-      });
-      return msgs;
+        if (!resp.ok) {
+            const erro = await resp.json();
+            alert('Erro ao atualizar status: ' + (erro.message || 'Tente novamente'));
+            return;
+        }
+
+        // Recarrega a lista após sucesso
+        await listarMensagens();
+        console.log(`Mensagem ${idMensagem} marcada como LIDA`);
+    } catch (error) {
+        console.error("Erro ao marcar como lida:", error);
+        alert('Erro ao marcar mensagem como lida');
     }
-
-    // common: { errors: [{ field, message }] }
-    if (Array.isArray(parsed.errors) && parsed.errors.length > 0 && typeof parsed.errors[0] === 'object') {
-      parsed.errors.forEach(e => {
-        const field = (e.field || '').toLowerCase();
-        const message = e.message || e.defaultMessage || JSON.stringify(e);
-        if (field.includes('email')) msgs.push(`Email: ${message}`);
-        else if (field.includes('cep')) msgs.push(`CEP: ${message}`);
-        else if (field.includes('numero') || field.includes('number')) msgs.push(`Número: ${message}`);
-        else if (field.includes('tipo')) msgs.push(`Tipo de descarte: ${message}`);
-        else msgs.push(`${field || 'Campo'}: ${message}`);
-      });
-      return msgs;
-    }
-
-    // common: { message: '...' }
-    if (parsed.message && typeof parsed.message === 'string') {
-      text = parsed.message;
-    }
-  }
-
-  // heurísticas sobre o texto cru
-  if (lower.includes('email')) {
-    if (lower.includes('unique') || lower.includes('duplicate') || lower.includes('já') || lower.includes('already')) {
-      msgs.push('O email informado já está em uso.');
-    } else if (lower.includes('format') || lower.includes('@') || lower.includes('invál') || lower.includes('valid')) {
-      msgs.push('Informe um email válido.');
-    } else {
-      msgs.push('Erro no campo email.');
-    }
-  }
-
-  if (lower.includes('cep')) {
-    if (lower.includes('obrig')) msgs.push('O cep é obrigatório.');
-    else msgs.push('CEP inválido — formato esperado 00000-000.');
-  }
-
-  if (lower.includes('numero') || lower.includes('number')) {
-    if (lower.includes('obrig')) msgs.push('O número é obrigatório.');
-    else msgs.push('Número do endereço inválido (somente números).');
-  }
-
-  if (lower.includes('tipo') || lower.includes('descarte')) {
-    msgs.push('É necessário informar ao menos um tipo de descarte válido.');
-  }
-
-  if (lower.includes('contato') || lower.includes('telefone') || lower.includes('whatsapp')) {
-    msgs.push('Contato inválido — use o formato (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.');
-  }
-
-  if (lower.includes('nome')) {
-    if (lower.includes('obrig')) msgs.push('O nome é obrigatório.');
-    else msgs.push('Nome inválido (máx 150 caracteres).');
-  }
-
-  if (lower.includes('rua')) {
-    msgs.push('A rua é obrigatória.');
-  }
-  if (lower.includes('bairro')) msgs.push('O bairro é obrigatório.');
-  if (lower.includes('cidade')) msgs.push('A cidade é obrigatória.');
-  if (lower.includes('estado')) msgs.push('O estado é obrigatório.');
-  if (lower.includes('descricao')) msgs.push('Descrição inválida (máx 200 caracteres).');
-
-  // se nada mapeado, retornar texto bruto
-  if (msgs.length === 0) {
-    if (text && text.length > 0) msgs.push(text);
-    else msgs.push('Erro desconhecido no servidor.');
-  }
-
-  // deduplicar
-  return [...new Set(msgs)];
 }
+
+// Enviar mensagem via procedure
+async function enviarMensagemProcedure() {
+    const body = {
+        usuarioId: document.getElementById("msgUsuarioId").value,
+        titulo: document.getElementById("msgTitulo").value,
+        conteudo: document.getElementById("msgConteudo").value
+    };
+
+    const resp = await fetch(`${API_MENSAGENS}/enviarProcedure`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    });
+
+    if (!resp.ok) {
+        const erro = await resp.json();
+        alert(mapServerErrors(erro));
+        return;
+    }
+
+    listarMensagens();
+}
+
+// Página já inicializa via DOMContentLoaded; remover inicializador duplicado
