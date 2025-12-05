@@ -463,7 +463,10 @@ async function salvarColeta() {
 async function excluirColeta(id) {
   if (!confirm("Deseja excluir este ponto?")) return;
   try {
-    const res = await fetch(`${API_LOCAIS}/admin/${id}`, { method: "DELETE" });
+    const res = await fetch(`${API_LOCAIS}/admin/${id}`, { 
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }
+    });
     if (!res.ok) {
       const txt = await res.text();
       alert(`Erro ao excluir: ${res.status}\n${txt}`);

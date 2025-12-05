@@ -92,7 +92,7 @@ public ResponseEntity<List<String>> sugestoes(@RequestParam String cidade) {
 
 @GetMapping("/public/buscar")
 public ResponseEntity<List<LocalDescartePublicResponseDTO>> buscarPorCidade(@RequestParam String cidade) {
-    return ResponseEntity.ok(serviceLocalDescarte.buscarPorCidade(cidade));
+    return ResponseEntity.ok(serviceLocalDescarte.buscarPorCidadeFuncao(cidade));
 }
 
 }

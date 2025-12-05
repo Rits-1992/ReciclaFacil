@@ -1,10 +1,13 @@
 package com.interdisciplinar.lp2.demo.Services;
 
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,8 @@ public class ServiceLocalDescarte {
         private MapperLocalDescarte mapperLocalDescarte;
         @Autowired
         private RepositoryMaterial materialRepository;
+        @Autowired
+        private JdbcTemplate jdbcTemplate;
 
 
         /*============================================================
@@ -167,10 +172,10 @@ public class ServiceLocalDescarte {
         }
 
         /*============================================================
-         * LISTAR — ADMIN (todos os dados)
+         * LISTAR — ADMIN (apenas pontos ativos)
          * =========================================================*/
         public List<LocalDescarteAdminResponseDTO> listarAdmin() {
-                return localRepo.findAll()
+                return localRepo.findBySituacaoTrue()
                                 .stream()
                                 .map(local -> new LocalDescarteAdminResponseDTO(
                                                 local.getId(),
@@ -236,21 +241,20 @@ public class ServiceLocalDescarte {
         }
 
         /*============================================================
-         * DELETE — ADMIN
+         * DELETE — ADMIN (Soft-Delete)
+         * Ao invés de deletar fisicamente, marca o registro como inativo.
+         * O front-end retorna apenas pontos ativos, então o ponto
+         * desaparecerá da tela, mas os dados ficarão preservados no banco.
          * =========================================================*/
         @Transactional
         public void deletar(Long id) {
-
-                EntityLocalDescarte local = localRepo.findById(id)
-                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                "Local não encontrado."));
-
-                // 1️⃣ Remove o vínculo com materiais
-                local.getMateriais().forEach(m -> m.getLocaisDescarte().remove(local));
-                local.getMateriais().clear();
-
-                // 2️⃣ Agora pode deletar sem violar FK
-                localRepo.delete(local);
+                // Verifica se o local existe
+                if (!localRepo.existsById(id)) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            "Local não encontrado.");
+                }
+                // Soft-delete via query nativa (evita validações JPA)
+                localRepo.softDeleteById(id);
         }
 
         /*============================================================
@@ -264,26 +268,43 @@ public class ServiceLocalDescarte {
                                 .distinct()
                                 .toList();
         }
+        /**
+         * Busca locais usando a função SQL dbo.fn_buscar_locais_por_cidade
+         * @param cidade cidade (trecho) a buscar
+         * @return lista de DTOs públicos
+         */
+        public List<LocalDescartePublicResponseDTO> buscarPorCidadeFuncao(String cidade) {
+                return buscarPorCidadeFuncao(cidade, 100);
+        }
 
-        public List<LocalDescartePublicResponseDTO> buscarPorCidade(String cidade) {
+        public List<LocalDescartePublicResponseDTO> buscarPorCidadeFuncao(String cidade, int limit) {
+                final String sql = "SELECT * FROM dbo.fn_buscar_locais_por_cidade(?, ?)";
+                return jdbcTemplate.query(sql, new Object[]{cidade, limit}, (rs, rowNum) -> {
+                        String nome = rs.getString("nome_local_descarte");
+                        Time t1 = rs.getTime("horario_abertura");
+                        Time t2 = rs.getTime("horario_fechamento");
+                        LocalTime horarioAbertura = t1 == null ? null : t1.toLocalTime();
+                        LocalTime horarioFechamento = t2 == null ? null : t2.toLocalTime();
+                        String contato = rs.getString("contato_whatsapp");
+                        String email = rs.getString("email");
+                        String descricao = rs.getString("descricao");
+                        String rua = rs.getString("rua");
+                        String numero = rs.getString("numero") != null ? rs.getString("numero") : "";
+                        String bairro = rs.getString("bairro");
+                        String cidadeRes = rs.getString("cidade");
+                        String estado = rs.getString("estado");
+                        String cep = rs.getString("cep");
 
-                return localRepo.findBySituacaoTrue().stream()
-                                .filter(l -> l.getEndereco().getCidade().equalsIgnoreCase(cidade))
-                                .map(l -> new LocalDescartePublicResponseDTO(
-                                                l.getNome(),
-                                                l.getHorarioAbertura(),
-                                                l.getHorarioFechamento(),
-                                                l.getContato(),
-                                                l.getEmail(),
-                                                l.getDescricao(),
-                                                new LocalDescartePublicResponseDTO.EnderecoDTO(
-                                                                l.getEndereco().getRua(),
-                                                                String.valueOf(l.getEndereco().getNumero()),
-                                                                l.getEndereco().getBairro(),
-                                                                l.getEndereco().getCidade(),
-                                                                l.getEndereco().getEstado(),
-                                                                l.getEndereco().getCep())))
-                                .toList();
+                        return new LocalDescartePublicResponseDTO(
+                                        nome,
+                                        horarioAbertura,
+                                        horarioFechamento,
+                                        contato,
+                                        email,
+                                        descricao,
+                                        new LocalDescartePublicResponseDTO.EnderecoDTO(rua, numero, bairro, cidadeRes, estado, cep)
+                        );
+                });
         }
 
 }

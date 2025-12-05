@@ -3,7 +3,10 @@ package com.interdisciplinar.lp2.demo.Repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.interdisciplinar.lp2.demo.Entities.EntityLocalDescarte;
 
@@ -28,4 +31,10 @@ public interface RepositoryLocalDescarte extends JpaRepository<EntityLocalDescar
 
     // Locais que aceitam determinado tipo de descarte
     List<EntityLocalDescarte> findByTiposDescarte_Id(Long tipoId);
+
+    // Soft-delete: marca como inativo sem validações JPA
+    @Modifying
+    @Transactional
+    @Query("UPDATE EntityLocalDescarte SET situacao = false WHERE id = :id")
+    void softDeleteById(Long id);
 }
